@@ -1,4 +1,4 @@
-# React + Vite Example App
+# URL Checker App
 
 Created a very simple browser application in Javascript that allows a user to check if an entered URL exists using the power of React, Vite, and Tailwind CSS.
 
