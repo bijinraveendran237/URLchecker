@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { throttle } from 'lodash';
 
 const Queryscreen = () => {
-    const [url, setUrl] = useState('');
+  const [url, setUrl] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [result, setResult] = useState(null);
+  const currentUrlRef = useRef('');
 
   const validateUrl = (value) => {
     const pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
@@ -43,8 +44,8 @@ const Queryscreen = () => {
   };
 
   const throttledCheck = useCallback(throttle(async (url) => {
-    if (validateUrl(url)) {
-      const result = await checkUrlExists(url);
+    const result = await checkUrlExists(url);
+    if (currentUrlRef.current === url) {
       setResult(result);
     }
   }, 3000), []);
@@ -52,6 +53,8 @@ const Queryscreen = () => {
   useEffect(() => {
     if (validateUrl(url)) {
       setIsValid(true);
+      currentUrlRef.current = url; 
+      setResult(null); 
       throttledCheck(url);
     } else {
       setIsValid(false);
